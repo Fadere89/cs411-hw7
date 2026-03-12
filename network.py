@@ -97,6 +97,7 @@ def update_weight(heap, node, new_weight):
 
 
 def push_transitive(heap, graph, adj_list, init_node, inf, visited, adj_row_width):
+    # push all nodes that this one eventually reaches, except already visited nodes.
     next_node = 1;
     while next_node < adj_row_width:
         if (visited[next_node]):
@@ -120,7 +121,7 @@ def heap_weight(heap, node):
 
 
 def dijkstra_search(graph, start_node, terminal_node):
-    visited = []; # list of nodes we've visited #O(|V|) space
+    visited = []; # list of nodes we've visited O(|V|) space
     max_numbered_node = 0;
     for edge in graph:
         if edge[0] > max_numbered_node:
@@ -132,12 +133,12 @@ def dijkstra_search(graph, start_node, terminal_node):
     
     adj_list = adjacency_list(graph);
     adj_row_width = len(adj_list[0]);
-    h = [];
+    h = []; # Heap with our nodes and their current weighted paths O(|V|) space
     
     push_adj(h, graph, adj_list, start_node, False, visited); # make our inital adjacency list and heap
     inf = 0; # we'll also get an infinity value
     for edge in graph:
-        inf += edge[2];
+        inf += edge[2]; # just sum all the weights, so no weight can possibly be higher than this one
     
     init_neighbors = len(h);
     terminal_path_exists = False;
@@ -149,11 +150,11 @@ def dijkstra_search(graph, start_node, terminal_node):
     for edge in h:
         if edge[1] == terminal_node:
             terminal_path_exists = True;
-    if not terminal_path_exists:
+    if not terminal_path_exists: # if no path to the terminal node exists, then just return -1
         return -1;
 
     
-    # from here, we just need to do the actual searching.
+    # from here, we 'll now use the actual algorithm, not too much code for it surpringly
     k = 0;
     n = len(h);
     while k < n: # now just go through our queue, checking all values
@@ -186,4 +187,4 @@ def dijkstra_search(graph, start_node, terminal_node):
     return min_weight;
 
 print(graph);
-print(dijkstra_search(graph, 1, 5));
+print(dijkstra_search(graph, 1, 5)); # Finding shortest length from node 1 to node 5
